@@ -75,7 +75,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  uint_fast8_t digit = 0;
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -99,6 +99,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    writeDigit(digit);
+    digit++;
+    if (digit == 10) {
+      digit = 0;
+    }
+    HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }
