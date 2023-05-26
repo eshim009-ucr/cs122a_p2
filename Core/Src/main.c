@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "sm_show_number.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -75,7 +75,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  uint_fast8_t digit = 0;
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -99,12 +99,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    writeDigit(digit);
-    digit++;
-    if (digit == 10) {
-      digit = 0;
-    }
-    HAL_Delay(1000);
+    sm_sn_tick();
+    HAL_Delay(5);
   }
   /* USER CODE END 3 */
 }
@@ -193,9 +189,13 @@ static void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, seg7b0_Pin|seg7b1_Pin|seg7b2_Pin|seg7b3_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, digen0_Pin|digen1_Pin|digen2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : seg7b0_Pin seg7b1_Pin seg7b2_Pin seg7b3_Pin */
   GPIO_InitStruct.Pin = seg7b0_Pin|seg7b1_Pin|seg7b2_Pin|seg7b3_Pin;
@@ -203,6 +203,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : digen0_Pin digen1_Pin digen2_Pin */
+  GPIO_InitStruct.Pin = digen0_Pin|digen1_Pin|digen2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */

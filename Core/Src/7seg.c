@@ -5,6 +5,7 @@
  *      Author: eshim009
  */
 #include <stdint.h>
+#include "7seg.h"
 #include "main.h"
 
 
