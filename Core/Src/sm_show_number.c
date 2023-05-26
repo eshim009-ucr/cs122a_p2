@@ -10,11 +10,6 @@
 #include "sm_show_number.h"
 
 
-const uint_fast8_t PIN_EN_HUNDREDS = GPIO_PIN_7; // PB7
-const uint_fast8_t PIN_EN_TENS = GPIO_PIN_6; // PB6
-const uint_fast8_t PIN_EN_ONES = GPIO_PIN_5; // PB5
-
-
 // The number to display
 // Testing variable, should be read from elsewhere
 const uint_fast16_t number = 42;
@@ -54,21 +49,21 @@ void sm_sn_tick() {
 
 	switch (sm_sn_state) {
 		case SM_SN_Hundreds:
-			HAL_GPIO_WritePin(GPIOB, PIN_EN_HUNDREDS, 1);
-			HAL_GPIO_WritePin(GPIOB, PIN_EN_TENS, 0);
-			HAL_GPIO_WritePin(GPIOB, PIN_EN_ONES, 0);
+			HAL_GPIO_WritePin(digen2_GPIO_Port, digen2_Pin, 1);
+			HAL_GPIO_WritePin(digen1_GPIO_Port, digen1_Pin, 0);
+			HAL_GPIO_WritePin(digen0_GPIO_Port, digen0_Pin, 0);
 			writeDigit((number % 1000) / 100);
 			break;
 		case SM_SN_Tens:
-			HAL_GPIO_WritePin(GPIOB, PIN_EN_HUNDREDS, 0);
-			HAL_GPIO_WritePin(GPIOB, PIN_EN_TENS, 1);
-			HAL_GPIO_WritePin(GPIOB, PIN_EN_ONES, 0);
+			HAL_GPIO_WritePin(digen2_GPIO_Port, digen2_Pin, 0);
+			HAL_GPIO_WritePin(digen1_GPIO_Port, digen1_Pin, 1);
+			HAL_GPIO_WritePin(digen0_GPIO_Port, digen0_Pin, 0);
 			writeDigit((number % 100) / 10);
 			break;
 		case SM_SN_Ones:
-			HAL_GPIO_WritePin(GPIOB, PIN_EN_HUNDREDS, 0);
-			HAL_GPIO_WritePin(GPIOB, PIN_EN_TENS, 0);
-			HAL_GPIO_WritePin(GPIOB, PIN_EN_ONES, 1);
+			HAL_GPIO_WritePin(digen2_GPIO_Port, digen2_Pin, 0);
+			HAL_GPIO_WritePin(digen1_GPIO_Port, digen1_Pin, 0);
+			HAL_GPIO_WritePin(digen0_GPIO_Port, digen0_Pin, 1);
 			writeDigit((number % 10) / 1);
 			break;
 	}
