@@ -67,13 +67,17 @@ int sm_tt_tick(int state) {
 			break;
 		case SM_TT_NextTap:
 			if (HAL_GPIO_ReadPin(btntap_GPIO_Port, btntap_Pin) == GPIO_PIN_SET) {
+				// Transition
 				state = SM_TT_Count;
+				// Mealy actions
 				num_taps++;
 			} else {
 				if (t_held < HOLD_THRESH) {
 					state = SM_TT_NextTap;
 				} else {
+					// Transition
 					state = SM_TT_LastTap;
+					// Mealy actions
 					num_taps++;
 					// Don't consider time held as part of tempo count
 					t -= t_held - 1;

@@ -27,7 +27,7 @@ enum sm_sn_state {
 };
 
 int sm_sn_tick(int state);
-void update_digits(void);
+static inline void update_digits(void);
 
 
 Task task_show_number = {
@@ -41,7 +41,9 @@ Task task_show_number = {
 int sm_sn_tick(int state) {
 	switch (state) {
 		case SM_SN_Init:
+			// Transition
 			state = SM_SN_Hundreds;
+			// Mealy actions
 			HAL_GPIO_WritePin(digen2_GPIO_Port, digen2_Pin, 0);
 			HAL_GPIO_WritePin(digen1_GPIO_Port, digen1_Pin, 0);
 			HAL_GPIO_WritePin(digen0_GPIO_Port, digen0_Pin, 0);
@@ -87,7 +89,7 @@ int sm_sn_tick(int state) {
 }
 
 
-void update_digits() {
+static inline void update_digits() {
 	if (tempo != last_tempo) {
 		hundreds = ((tempo % 1000) / 100);
 		tens = ((tempo % 100) / 10);
