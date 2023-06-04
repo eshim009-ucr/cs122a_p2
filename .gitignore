@@ -1,4 +1,10 @@
+# Binaries
 Debug/
+Release/
+
+# Documentation
 *.pdf
 *.txt
+
+# Logs
 *.launch
