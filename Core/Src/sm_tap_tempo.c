@@ -26,7 +26,7 @@ enum sm_tt_state {
 };
 
 int sm_tt_tick(int state);
-inline void update_tempo(void);
+static inline void update_tempo(void);
 
 
 // Time since the tap began recording
@@ -119,6 +119,6 @@ int sm_tt_tick(int state) {
 }
 
 
-inline void update_tempo(void) {
+static inline void update_tempo(void) {
 	tempo = num_taps * TICKS_PER_MINUTE / t;
 }
