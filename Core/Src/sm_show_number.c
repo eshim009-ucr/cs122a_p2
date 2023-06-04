@@ -27,7 +27,7 @@ enum sm_sn_state {
 	SM_SN_Ones
 };
 
-void sm_sn_tick(void);
+int sm_sn_tick(int state);
 
 
 Task task_show_number = {
@@ -38,26 +38,26 @@ Task task_show_number = {
 };
 
 
-void sm_sn_tick(void) {
-	switch (task_show_number.state) {
+int sm_sn_tick(int state) {
+	switch (state) {
 		case SM_SN_Init:
-			task_show_number.state = SM_SN_Hundreds;
+			state = SM_SN_Hundreds;
 			break;
 		case SM_SN_Hundreds:
-			task_show_number.state = SM_SN_Tens;
+			state = SM_SN_Tens;
 			break;
 		case SM_SN_Tens:
-			task_show_number.state = SM_SN_Ones;
+			state = SM_SN_Ones;
 			break;
 		case SM_SN_Ones:
-			task_show_number.state = SM_SN_Hundreds;
+			state = SM_SN_Hundreds;
 			break;
 		default:
-			task_show_number.state = SM_SN_Init;
+			state = SM_SN_Init;
 			break;
 	}
 
-	switch (task_show_number.state) {
+	switch (state) {
 		case SM_SN_Hundreds:
 			HAL_GPIO_WritePin(digen2_GPIO_Port, digen2_Pin, 1);
 			HAL_GPIO_WritePin(digen1_GPIO_Port, digen1_Pin, 0);
@@ -79,4 +79,6 @@ void sm_sn_tick(void) {
 		default:
 			break;
 	}
+
+	return state;
 }

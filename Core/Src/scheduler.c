@@ -10,16 +10,17 @@
 
 
 const uint_fast16_t SCHEDULER_QUANTUM = 5;
-const uint_fast8_t NUM_TASKS = 1;
-static Task* tasks[] = {&task_show_number};
+static Task* tasks[] = {&task_show_number, 0};
 
 
 void scheduler_tick() {
-	for (int i = 0; i < NUM_TASKS; ++i) {
-		if (tasks[i]->t_waiting >= tasks[i]->period) {
-			tasks[i]->tick_fn();
-			tasks[i]->t_waiting = 0;
+	for (Task** task_ptr = tasks; *task_ptr != 0; task_ptr++) {
+		Task* task = *task_ptr;
+
+		if (task->t_waiting >= task->period) {
+			task->state = task->tick_fn(task->state);
+			task->t_waiting = 0;
 		}
-		tasks[i]->t_waiting += SCHEDULER_QUANTUM;
+		task->t_waiting += SCHEDULER_QUANTUM;
 	}
 }

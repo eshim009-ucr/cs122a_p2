@@ -23,7 +23,7 @@ typedef struct {
 	int state;
 	uint_fast16_t period;
 	uint_fast16_t t_waiting;
-	void (*tick_fn)(void);
+	int (*tick_fn)(int state);
 } Task;
 
 extern const uint_fast16_t SCHEDULER_QUANTUM;
