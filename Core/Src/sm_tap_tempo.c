@@ -17,14 +17,16 @@ const uint_fast32_t TICKS_PER_MINUTE = (60 * 1000) / TASK_PERIOD;
 
 enum sm_tt_state {
 	SM_TT_Init,
-	SM_TT_Wait,
+	SM_TT_WaitPress,
 	SM_TT_StartTap,
 	SM_TT_Count,
 	SM_TT_NextTap,
-	SM_TT_LastTap
+	SM_TT_LastTap,
+	SM_TT_WaitRelease
 };
 
 int sm_tt_tick(int state);
+inline void update_tempo(void);
 
 
 // Time since the tap began recording
@@ -48,11 +50,11 @@ Task task_tap_tempo = {
 int sm_tt_tick(int state) {
 	switch (state) {
 		case SM_TT_Init:
-			state = SM_TT_Wait;
+			state = SM_TT_WaitPress;
 			break;
-		case SM_TT_Wait:
+		case SM_TT_WaitPress:
 			if (HAL_GPIO_ReadPin(btntap_GPIO_Port, btntap_Pin) == GPIO_PIN_SET) {
-				state = SM_TT_Wait;
+				state = SM_TT_WaitPress;
 			} else {
 				state = SM_TT_StartTap;
 			}
@@ -79,7 +81,14 @@ int sm_tt_tick(int state) {
 			}
 			break;
 		case SM_TT_LastTap:
-			state = SM_TT_Wait;
+			state = SM_TT_WaitRelease;
+			break;
+		case SM_TT_WaitRelease:
+			if (HAL_GPIO_ReadPin(btntap_GPIO_Port, btntap_Pin) == GPIO_PIN_SET) {
+				state = SM_TT_WaitPress;
+			} else {
+				state = SM_TT_WaitRelease;
+			}
 			break;
 		default:
 			state = SM_TT_Init;
@@ -100,11 +109,16 @@ int sm_tt_tick(int state) {
 			t_held++;
 			break;
 		case SM_TT_LastTap:
-			tempo = num_taps * TICKS_PER_MINUTE / t;
+			update_tempo();
 			break;
 		default:
 			break;
 	}
 
 	return state;
+}
+
+
+inline void update_tempo(void) {
+	tempo = num_taps * TICKS_PER_MINUTE / t;
 }
