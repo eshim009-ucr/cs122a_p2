@@ -20,12 +20,12 @@ const uint_fast16_t tens = (number - hundreds) / 10;
 const uint_fast16_t ones = number - hundreds - tens;
 
 
-enum {
+enum sm_sn_state {
 	SM_SN_Init,
 	SM_SN_Hundreds,
 	SM_SN_Tens,
 	SM_SN_Ones
-} sm_sn_state;
+};
 
 void sm_sn_tick(void);
 
@@ -39,25 +39,25 @@ Task task_show_number = {
 
 
 void sm_sn_tick(void) {
-	switch (sm_sn_state) {
+	switch (task_show_number.state) {
 		case SM_SN_Init:
-			sm_sn_state = SM_SN_Hundreds;
+			task_show_number.state = SM_SN_Hundreds;
 			break;
 		case SM_SN_Hundreds:
-			sm_sn_state = SM_SN_Tens;
+			task_show_number.state = SM_SN_Tens;
 			break;
 		case SM_SN_Tens:
-			sm_sn_state = SM_SN_Ones;
+			task_show_number.state = SM_SN_Ones;
 			break;
 		case SM_SN_Ones:
-			sm_sn_state = SM_SN_Hundreds;
+			task_show_number.state = SM_SN_Hundreds;
 			break;
 		default:
-			sm_sn_state = SM_SN_Init;
+			task_show_number.state = SM_SN_Init;
 			break;
 	}
 
-	switch (sm_sn_state) {
+	switch (task_show_number.state) {
 		case SM_SN_Hundreds:
 			HAL_GPIO_WritePin(digen2_GPIO_Port, digen2_Pin, 1);
 			HAL_GPIO_WritePin(digen1_GPIO_Port, digen1_Pin, 0);
@@ -75,6 +75,8 @@ void sm_sn_tick(void) {
 			HAL_GPIO_WritePin(digen1_GPIO_Port, digen1_Pin, 0);
 			HAL_GPIO_WritePin(digen0_GPIO_Port, digen0_Pin, 1);
 			writeDigit((number % 10) / 1);
+			break;
+		default:
 			break;
 	}
 }
