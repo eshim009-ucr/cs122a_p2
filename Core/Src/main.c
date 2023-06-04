@@ -238,6 +238,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : btntap_Pin */
+  GPIO_InitStruct.Pin = btntap_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(btntap_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pins : digen0_Pin digen1_Pin digen2_Pin */
   GPIO_InitStruct.Pin = digen0_Pin|digen1_Pin|digen2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;

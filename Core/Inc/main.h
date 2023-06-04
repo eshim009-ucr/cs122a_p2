@@ -75,6 +75,8 @@ void Error_Handler(void);
 #define SWCLK_GPIO_Port GPIOA
 #define VCP_RX_Pin GPIO_PIN_15
 #define VCP_RX_GPIO_Port GPIOA
+#define btntap_Pin GPIO_PIN_4
+#define btntap_GPIO_Port GPIOB
 #define digen0_Pin GPIO_PIN_5
 #define digen0_GPIO_Port GPIOB
 #define digen1_Pin GPIO_PIN_6
