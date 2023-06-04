@@ -7,9 +7,10 @@
 
 #ifndef SRC_SM_SHOW_NUMBER_H_
 #define SRC_SM_SHOW_NUMBER_H_
+#include "scheduler.h"
 
 
-void sm_sn_tick();
+extern Task task_show_number;
 
 
 #endif /* SRC_SM_SHOW_NUMBER_H_ */

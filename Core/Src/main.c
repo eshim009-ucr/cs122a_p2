@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "sm_show_number.h"
+#include "scheduler.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -255,7 +255,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   // Check which version of the timer triggered this callback and toggle LED
   if (htim == &htim16)
   {
-    sm_sn_tick();
+    scheduler_tick();
   }
 }
 /* USER CODE END 4 */

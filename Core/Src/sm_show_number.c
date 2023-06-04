@@ -27,8 +27,18 @@ enum {
 	SM_SN_Ones
 } sm_sn_state;
 
+void sm_sn_tick(void);
 
-void sm_sn_tick() {
+
+Task task_show_number = {
+	.state = SM_SN_Init,
+	.period = 5,
+	.t_waiting = 0,
+	.tick_fn = sm_sn_tick
+};
+
+
+void sm_sn_tick(void) {
 	switch (sm_sn_state) {
 		case SM_SN_Init:
 			sm_sn_state = SM_SN_Hundreds;
