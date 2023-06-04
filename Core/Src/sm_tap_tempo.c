@@ -78,6 +78,9 @@ int sm_tt_tick(int state) {
 				}
 			}
 			break;
+		case SM_TT_LastTap:
+			state = SM_TT_Wait;
+			break;
 		default:
 			state = SM_TT_Init;
 			break;
@@ -93,6 +96,7 @@ int sm_tt_tick(int state) {
 			t_held = 0;
 			break;
 		case SM_TT_NextTap:
+			t++;
 			t_held++;
 			break;
 		case SM_TT_LastTap:
