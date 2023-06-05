@@ -10,9 +10,9 @@
 #include "sm_tap_tempo.h"
 
 
-const uint_fast16_t TASK_PERIOD =  100;
-const uint_fast8_t HOLD_THRESH = 3;
-const uint_fast32_t TICKS_PER_MINUTE = (60 * 1000) / TASK_PERIOD;
+static const uint_fast16_t TASK_PERIOD =  100;
+static const uint_fast8_t HOLD_THRESH = 3;
+static const uint_fast32_t TICKS_PER_MINUTE = (60 * 1000) / TASK_PERIOD;
 
 
 enum sm_tt_state {
@@ -30,13 +30,13 @@ static inline void update_tempo(void);
 
 
 // Time since the tap began recording
-uint_fast32_t t;
+static uint_fast32_t t;
 // Current recorded tempo
 uint_fast8_t tempo = 0;
 // Number of taps that have been recorded
-uint_fast8_t num_taps;
+static uint_fast8_t num_taps;
 // Number of ticks that the button has been held down for
-uint_fast8_t t_held;
+static uint_fast8_t t_held;
 
 
 Task task_tap_tempo = {

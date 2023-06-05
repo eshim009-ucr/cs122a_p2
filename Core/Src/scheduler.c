@@ -7,11 +7,17 @@
 #include <stdint.h>
 #include "sm_show_number.h"
 #include "sm_tap_tempo.h"
+#include "sm_change_tempo.h"
 #include "scheduler.h"
 
 
 const uint_fast16_t SCHEDULER_QUANTUM = 5;
-static Task* tasks[] = {&task_show_number, &task_tap_tempo, 0};
+static Task* tasks[] = {
+	&task_show_number,
+	&task_tap_tempo,
+	&task_change_tempo,
+	0
+};
 
 
 void scheduler_tick() {
