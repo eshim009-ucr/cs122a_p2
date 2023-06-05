@@ -8,6 +8,7 @@
 #include "sm_show_number.h"
 #include "sm_tap_tempo.h"
 #include "sm_change_tempo.h"
+#include "sm_display.h"
 #include "scheduler.h"
 
 
@@ -16,6 +17,7 @@ static Task* tasks[] = {
 	&task_show_number,
 	&task_tap_tempo,
 	&task_change_tempo,
+	&task_display,
 	0
 };
 
