@@ -20,6 +20,7 @@ static uint_fast8_t ones;
 
 
 enum sm_sn_state {
+	SM_SN_Start,
 	SM_SN_Init,
 	SM_SN_Hundreds,
 	SM_SN_Tens,
@@ -40,13 +41,11 @@ Task task_show_number = {
 
 int sm_sn_tick(int state) {
 	switch (state) {
+		case SM_SN_Start:
+			state = SM_SN_Init;
+			break;
 		case SM_SN_Init:
-			// Transition
 			state = SM_SN_Hundreds;
-			// Mealy actions
-			HAL_GPIO_WritePin(digen2_GPIO_Port, digen2_Pin, 0);
-			HAL_GPIO_WritePin(digen1_GPIO_Port, digen1_Pin, 0);
-			HAL_GPIO_WritePin(digen0_GPIO_Port, digen0_Pin, 0);
 			break;
 		case SM_SN_Hundreds:
 			state = SM_SN_Tens;
@@ -58,11 +57,16 @@ int sm_sn_tick(int state) {
 			state = SM_SN_Hundreds;
 			break;
 		default:
-			state = SM_SN_Init;
+			state = SM_SN_Start;
 			break;
 	}
 
 	switch (state) {
+		case SM_SN_Init:
+			HAL_GPIO_WritePin(digen2_GPIO_Port, digen2_Pin, 0);
+			HAL_GPIO_WritePin(digen1_GPIO_Port, digen1_Pin, 0);
+			HAL_GPIO_WritePin(digen0_GPIO_Port, digen0_Pin, 0);
+			break;
 		case SM_SN_Hundreds:
 			HAL_GPIO_WritePin(digen0_GPIO_Port, digen0_Pin, 0);
 			HAL_GPIO_WritePin(digen2_GPIO_Port, digen2_Pin, 1);

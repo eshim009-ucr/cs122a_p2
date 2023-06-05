@@ -10,6 +10,7 @@
 
 
 enum sm_dp_state {
+	SM_DP_Start,
 	SM_DP_Init,
 	SM_DP_On,
 	SM_DP_Off
@@ -20,7 +21,7 @@ int sm_dp_tick(int state);
 
 
 Task task_display = {
-	.state = SM_DP_Init,
+	.state = SM_DP_Start,
 	.period = 500,
 	.t_waiting = 0,
 	.tick_fn = sm_dp_tick
@@ -29,6 +30,9 @@ Task task_display = {
 
 int sm_dp_tick(int state) {
 	switch (state) {
+		case SM_DP_Start:
+			state = SM_DP_Init;
+			break;
 		case SM_DP_Init:
 			state = SM_DP_On;
 			break;
@@ -39,11 +43,14 @@ int sm_dp_tick(int state) {
 			state = SM_DP_On;
 			break;
 		default:
-			state = SM_DP_Init;
+			state = SM_DP_Start;
 			break;
 	}
 
 	switch (state) {
+		case SM_DP_Init:
+			ssd1306_set_sleep_mode(false);
+			break;
 		case SM_DP_On:
 			ssd1306_all_on(true);
 			break;

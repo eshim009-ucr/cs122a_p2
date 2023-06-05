@@ -15,7 +15,7 @@ static const uint_fast8_t HOLD_THRESH = 3;
 
 
 enum sm_ct_state {
-	SM_CT_Init,
+	SM_CT_Start,
 	SM_CT_Wait,
 	SM_CT_PressInc,
 	SM_CT_PressDec
@@ -29,7 +29,7 @@ static uint_fast8_t t_held;
 
 
 Task task_change_tempo = {
-	.state = SM_CT_Init,
+	.state = SM_CT_Start,
 	.period = 100,
 	.t_waiting = 0,
 	.tick_fn = sm_ct_tick
@@ -41,7 +41,7 @@ int sm_ct_tick(int state) {
 	bool dec_pressed = (HAL_GPIO_ReadPin(btndec_GPIO_Port, btndec_Pin) == GPIO_PIN_RESET) ? true: false;
 
 	switch (state) {
-		case SM_CT_Init:
+		case SM_CT_Start:
 			state = SM_CT_Wait;
 			break;
 		case SM_CT_Wait:
@@ -91,7 +91,7 @@ int sm_ct_tick(int state) {
 			}
 			break;
 		default:
-			state = SM_CT_Init;
+			state = SM_CT_Start;
 			break;
 	}
 

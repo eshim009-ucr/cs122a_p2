@@ -16,7 +16,7 @@ static const uint_fast32_t TICKS_PER_MINUTE = (60 * 1000) / TASK_PERIOD;
 
 
 enum sm_tt_state {
-	SM_TT_Init,
+	SM_TT_Start,
 	SM_TT_WaitPress,
 	SM_TT_StartTap,
 	SM_TT_Count,
@@ -40,7 +40,7 @@ static uint_fast8_t t_held;
 
 
 Task task_tap_tempo = {
-	.state = SM_TT_Init,
+	.state = SM_TT_Start,
 	.period = TASK_PERIOD,
 	.t_waiting = 0,
 	.tick_fn = sm_tt_tick
@@ -49,7 +49,7 @@ Task task_tap_tempo = {
 
 int sm_tt_tick(int state) {
 	switch (state) {
-		case SM_TT_Init:
+		case SM_TT_Start:
 			state = SM_TT_WaitPress;
 			break;
 		case SM_TT_WaitPress:
@@ -95,7 +95,7 @@ int sm_tt_tick(int state) {
 			}
 			break;
 		default:
-			state = SM_TT_Init;
+			state = SM_TT_Start;
 			break;
 	}
 
