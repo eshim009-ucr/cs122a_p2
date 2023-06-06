@@ -10,24 +10,25 @@
 #include "ssd1306.h"
 
 
-static const uint16_t ADDRESS = 0x3C;
+static const uint16_t ADDRESS = 0x3C << 1;
 
 
 void ssd1306_set_contrast(uint8_t contrast) {
-    HAL_I2C_Master_Transmit(&hi2c1, ADDRESS << 1, &contrast, 1, 1000);
+	uint8_t data[] = {0x81, contrast};
+	HAL_I2C_Master_Transmit(&hi2c1, ADDRESS, data, 2, 1000);
 }
 
 void ssd1306_all_on(bool all_on) {
 	uint8_t data = all_on ? 0xA5 : 0xA4;
-    HAL_I2C_Master_Transmit(&hi2c1, ADDRESS << 1, &data, 1, 1000);
+	HAL_I2C_Master_Transmit(&hi2c1, ADDRESS, &data, 1, 1000);
 }
 
 void ssd1306_set_inverted(bool inverted) {
 	uint8_t data = inverted ? 0xA7 : 0xA6;
-    HAL_I2C_Master_Transmit(&hi2c1, ADDRESS << 1, &data, 1, 1000);
+	HAL_I2C_Master_Transmit(&hi2c1, ADDRESS, &data, 1, 1000);
 }
 
 void ssd1306_set_sleep_mode(bool sleep) {
 	uint8_t data = sleep ? 0xAE : 0xAF;
-    HAL_I2C_Master_Transmit(&hi2c1, ADDRESS << 1, &data, 1, 1000);
+	HAL_I2C_Master_Transmit(&hi2c1, ADDRESS, &data, 1, 1000);
 }
