@@ -6,6 +6,7 @@
  */
 #include <stdint.h>
 #include <stdbool.h>
+#include "main.h"
 #include "i2c.h"
 #include "ssd1306.h"
 
@@ -20,6 +21,7 @@ void ssd1306_set_contrast(uint8_t contrast) {
 
 void ssd1306_all_on(bool all_on) {
 	uint8_t data = all_on ? 0xA5 : 0xA4;
+	HAL_GPIO_WritePin(ledboard_GPIO_Port, ledboard_Pin, all_on);
 	HAL_I2C_Master_Transmit(&hi2c1, ADDRESS, &data, 1, 1000);
 }
 
