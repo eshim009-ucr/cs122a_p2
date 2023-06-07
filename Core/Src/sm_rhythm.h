@@ -11,6 +11,14 @@
 #include "scheduler.h"
 
 
+#define WHOLE 1
+#define HALF 2
+#define DOTTED_QUARTER 3
+#define QUARTER 4
+#define DOTTED_EIGHTH 6
+#define EIGHTH 8
+
+
 extern Task task_rhythm;
 extern int8_t const* current_rhythm;
 

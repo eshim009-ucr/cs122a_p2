@@ -9,15 +9,7 @@
 #include "sm_rhythm.h"
 
 
-#define WHOLE 1
-#define HALF 2
-#define DOTTED_QUARTER 3
-#define QUARTER 4
-#define DOTTED_EIGHTH 6
-#define EIGHTH 8
-
-
-static const int8_t RHYTHMS[3][16] = {
+const int8_t RHYTHMS[3][16] = {
 	// Straight Rhythm
 	{QUARTER, QUARTER, 0},
 	// Star Wars "Imperial March" Theme
@@ -85,9 +77,11 @@ int sm_rh_tick(int state) {
 			current_rhythm = RHYTHMS[0];
 			break;
 		case SM_RH_Imperial:
+			HAL_GPIO_WritePin(ledboard_GPIO_Port, ledboard_Pin, GPIO_PIN_SET);
 			current_rhythm = RHYTHMS[1];
 			break;
 		case SM_RH_Clave:
+			HAL_GPIO_WritePin(ledboard_GPIO_Port, ledboard_Pin, GPIO_PIN_RESET);
 			current_rhythm = RHYTHMS[2];
 			break;
 		default:

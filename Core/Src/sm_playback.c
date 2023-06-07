@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include "scheduler.h"
 #include "sm_tap_tempo.h"
+#include "sm_rhythm.h"
 #include "sm_playback.h"
 #include "tim.h"
 
@@ -15,9 +16,14 @@ static const uint_fast8_t TASK_PERIOD = 50;
 
 // Used to check if interval should be updated
 static uint_fast16_t last_tempo = 0;
+static int8_t const* last_rhythm = 0;
 // The time between metronome beeps
 // Equivalent to a quarter note
 static uint_fast16_t t_off = 0;
+// Used to determine practical note delays
+static uint_fast16_t note_len_lut[9];
+// Track where we are in the rhyhtm
+static uint_fast8_t i_rhythm = 0;
 
 
 enum sm_ct_state {
@@ -41,7 +47,7 @@ Task task_playback = {
 
 
 int sm_pb_tick(int state) {
-	static int i;
+	static int i_note;
 
 	switch (state) {
 		case SM_PB_Init:
@@ -58,7 +64,7 @@ int sm_pb_tick(int state) {
 			state = SM_PB_SpeakerOff;
 			break;
 		case SM_PB_SpeakerOff:
-			if (i >= t_off) {
+			if (i_note >= note_len_lut[current_rhythm[i_rhythm]]) {
 				state = SM_PB_SpeakerOn;
 			} else {
 				state = SM_PB_SpeakerOff;
@@ -72,14 +78,17 @@ int sm_pb_tick(int state) {
 	switch (state) {
 		case SM_PB_SpeakerOn:
 			HAL_TIM_PWM_Start(&htim14, TIM_CHANNEL_1);
-			HAL_GPIO_WritePin(ledboard_GPIO_Port, ledboard_Pin, GPIO_PIN_SET);
 			update_interval();
-			i = 0;
+			i_note = 0;
+			i_rhythm++;
+			// Loop back around if necessary
+			if (current_rhythm[i_rhythm] == 0) {
+				i_rhythm = 0;
+			}
 			break;
 		case SM_PB_SpeakerOff:
 			HAL_TIM_PWM_Stop(&htim14, TIM_CHANNEL_1);
-			HAL_GPIO_WritePin(ledboard_GPIO_Port, ledboard_Pin, GPIO_PIN_RESET);
-			i += TASK_PERIOD;
+			i_note += TASK_PERIOD;
 			break;
 		default:
 			break;
@@ -93,5 +102,15 @@ static inline void update_interval() {
 	if (tempo != last_tempo) {
 		t_off = 60000L / tempo / 2;
 		last_tempo = tempo;
+	}
+	if (current_rhythm != last_rhythm) {
+		note_len_lut[WHOLE] = t_off * 4;
+		note_len_lut[HALF] = t_off * 2;
+		note_len_lut[DOTTED_QUARTER] = t_off * 3 / 2;
+		note_len_lut[QUARTER] = t_off;
+		note_len_lut[DOTTED_EIGHTH] = t_off * 3 / 4;
+		note_len_lut[EIGHTH] = t_off / 2;
+		i_rhythm = 0;
+		last_rhythm = current_rhythm;
 	}
 }

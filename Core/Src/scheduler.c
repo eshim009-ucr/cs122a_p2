@@ -9,6 +9,7 @@
 #include "sm_tap_tempo.h"
 #include "sm_change_tempo.h"
 #include "sm_playback.h"
+#include "sm_rhythm.h"
 #include "scheduler.h"
 
 
@@ -18,6 +19,7 @@ static Task* tasks[] = {
 	&task_tap_tempo,
 	&task_change_tempo,
 	&task_playback,
+	&task_rhythm,
 	0
 };
 
