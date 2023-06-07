@@ -11,7 +11,7 @@
 #include "tim.h"
 
 
-static const uint_fast8_t TASK_PERIOD = 200;
+static const uint_fast8_t TASK_PERIOD = 50;
 
 // Used to check if interval should be updated
 static uint_fast16_t last_tempo = 0;
@@ -91,7 +91,7 @@ int sm_pb_tick(int state) {
 
 static inline void update_interval() {
 	if (tempo != last_tempo) {
-		t_off = 60000L / tempo;
+		t_off = 60000L / tempo / 2;
 		last_tempo = tempo;
 	}
 }

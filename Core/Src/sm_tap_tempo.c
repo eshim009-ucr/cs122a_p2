@@ -12,7 +12,7 @@
 
 static const uint_fast16_t TASK_PERIOD =  100;
 static const uint_fast8_t HOLD_THRESH = 3;
-static const uint_fast32_t TICKS_PER_MINUTE = (60 * 1000) / TASK_PERIOD;
+static const uint_fast32_t TICKS_PER_MINUTE = (60 * 1000) / TASK_PERIOD / 2;
 
 
 enum sm_tt_state {
