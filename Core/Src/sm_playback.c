@@ -36,6 +36,7 @@ enum sm_ct_state {
 
 int sm_pb_tick(int state);
 static inline void update_interval(void);
+static inline void update_rhyhtm(void);
 
 
 Task task_playback = {
@@ -102,15 +103,22 @@ static inline void update_interval() {
 	if (tempo != last_tempo) {
 		t_off = 60000L / tempo / 2;
 		last_tempo = tempo;
+		update_rhyhtm();
 	}
+
 	if (current_rhythm != last_rhythm) {
-		note_len_lut[WHOLE] = t_off * 4;
-		note_len_lut[HALF] = t_off * 2;
-		note_len_lut[DOTTED_QUARTER] = t_off * 3 / 2;
-		note_len_lut[QUARTER] = t_off;
-		note_len_lut[DOTTED_EIGHTH] = t_off * 3 / 4;
-		note_len_lut[EIGHTH] = t_off / 2;
-		i_rhythm = 0;
-		last_rhythm = current_rhythm;
+		update_rhyhtm();
 	}
+}
+
+
+static inline void update_rhyhtm() {
+	note_len_lut[WHOLE] = t_off * 4;
+	note_len_lut[HALF] = t_off * 2;
+	note_len_lut[DOTTED_QUARTER] = t_off * 3 / 2;
+	note_len_lut[QUARTER] = t_off;
+	note_len_lut[DOTTED_EIGHTH] = t_off * 3 / 4;
+	note_len_lut[EIGHTH] = t_off / 2;
+	i_rhythm = 0;
+	last_rhythm = current_rhythm;
 }
